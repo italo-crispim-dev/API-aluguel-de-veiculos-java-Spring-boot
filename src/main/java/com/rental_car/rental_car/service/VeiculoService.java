@@ -1,5 +1,6 @@
 package com.rental_car.rental_car.service;
 
+import com.rental_car.rental_car.model.StatusVeiculo;
 import com.rental_car.rental_car.model.Veiculo;
 import com.rental_car.rental_car.repository.VeiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ public class VeiculoService {
 
 
     public Veiculo add(Veiculo veiculo){
+        veiculo.setStatusVeiculo(StatusVeiculo.DISPONIVEL);
         Veiculo result = veiculoRepository.save(veiculo);
         return result;
     }

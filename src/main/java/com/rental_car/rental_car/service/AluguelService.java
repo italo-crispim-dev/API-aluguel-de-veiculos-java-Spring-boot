@@ -1,10 +1,7 @@
 package com.rental_car.rental_car.service;
 
-import com.rental_car.rental_car.model.Aluguel;
-import com.rental_car.rental_car.model.StatusAluguel;
-import com.rental_car.rental_car.model.StatusVeiculo;
-import com.rental_car.rental_car.model.User;
-import com.rental_car.rental_car.model.Veiculo;
+import com.rental_car.rental_car.model.*;
+
 import com.rental_car.rental_car.repository.AluguelRepository;
 import com.rental_car.rental_car.repository.UserRepository;
 import com.rental_car.rental_car.repository.VeiculoRepository;
@@ -36,7 +33,7 @@ public class AluguelService {
         double valorTotal = dias * veiculo.getValor_diaria();
 
         aluguel.setCliente(user);
-        veiculo.setStatusVeiculo(com.rental_car.rental_car.model.StatusVeiculo.ALUGADO);
+        veiculo.setStatusVeiculo(StatusVeiculo.ALUGADO);
         aluguel.setVeiculo(veiculo);
         aluguel.setValorAluguel(valorTotal);
         //Criar verificacao para saber se o aluguel é ativo ou agendado
