@@ -3,6 +3,7 @@ package com.rental_car.rental_car.controller;
 import com.rental_car.rental_car.model.Aluguel;
 import com.rental_car.rental_car.service.AluguelService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,28 +16,28 @@ public class AluguelContoller {
     private AluguelService aluguelService;
 
     @PostMapping
-    public Aluguel add(@RequestBody Aluguel aluguel){
-        return aluguelService.add(aluguel);
+    public ResponseEntity<Aluguel> add(@RequestBody Aluguel aluguel){
+        return ResponseEntity.status(201).body(aluguelService.add(aluguel));
     }
 
     @GetMapping(value = "/{id}")
-    public Aluguel findById(@PathVariable int id){
-        return aluguelService.findById(id);
+    public ResponseEntity<Aluguel> findById(@PathVariable int id) {
+        return ResponseEntity.ok().body(aluguelService.findById(id));
     }
 
     @GetMapping
-    public List<Aluguel> findAll(){
-        return aluguelService.findAll();
+    public ResponseEntity<List<Aluguel>> findAll() {
+        return ResponseEntity.ok().body(aluguelService.findAll());
     }
 
-    @DeleteMapping(value = "/{id}")
-    public Aluguel delete(@PathVariable int id){
-        return aluguelService.delete(id);
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<Aluguel> finaliza(@PathVariable int id){
+        return ResponseEntity.ok().body(aluguelService.finaliza(id));
     }
 
     @PutMapping(value = "/{id}")
-    public Aluguel update(@PathVariable int id, @RequestBody Aluguel novosDados){
-        return aluguelService.update(id, novosDados);
+    public ResponseEntity<Aluguel> update(@PathVariable int id, @RequestBody Aluguel novosDados){
+        return ResponseEntity.ok().body(aluguelService.update(id, novosDados));
     }
 
 

@@ -1,5 +1,6 @@
 package com.rental_car.rental_car.service;
 
+import com.rental_car.rental_car.exception.UserNaoEncontradoException;
 import com.rental_car.rental_car.model.User;
 import com.rental_car.rental_car.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,9 @@ public class UserService {
     }
 
     public User findById(int id){
-        return userRepository.findById(id).get();
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNaoEncontradoException(
+                        "Usuario de ID " + id + " Não foi encontrado"));
     }
 
     public List<User> findAll(){
@@ -27,11 +30,12 @@ public class UserService {
     }
 
     public void delete(int id){
+        findById(id);
         userRepository.deleteById(id);
     }
 
     public User update(int id, User novosdados){
-        User user = userRepository.findById(id).get();
+        User user = findById(id);
         user.setNome(novosdados.getNome());
         return userRepository.save(user);
     }

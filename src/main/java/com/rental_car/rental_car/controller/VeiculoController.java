@@ -4,6 +4,7 @@ import com.rental_car.rental_car.model.Veiculo;
 import com.rental_car.rental_car.repository.VeiculoRepository;
 import com.rental_car.rental_car.service.VeiculoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,21 +17,21 @@ public class VeiculoController {
     private VeiculoService veiculoService;
 
     @PostMapping
-    public Veiculo add(@RequestBody Veiculo veiculo){
+    public ResponseEntity<Veiculo> add(@RequestBody Veiculo veiculo){
         Veiculo result = veiculoService.add(veiculo);
-        return result;
+        return ResponseEntity.status(201).body(veiculo);
     }
 
     @GetMapping
-    public List<Veiculo> allFind(){
+    public ResponseEntity<List<Veiculo>> allFind(){
         List<Veiculo> result = veiculoService.allFind();
-        return result;
+        return ResponseEntity.ok().body(result);
     }
 
     @GetMapping(value = "/{id}")
-    public Veiculo findById(@PathVariable int id){
+    public ResponseEntity<Veiculo> findById(@PathVariable int id){
         Veiculo result = veiculoService.findById(id);
-        return result;
+        return ResponseEntity.ok().body(result);
     }
 
     @PutMapping(value = "/{id}")
@@ -40,7 +41,8 @@ public class VeiculoController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public void delete(@PathVariable int id){
+    public ResponseEntity<Void> delete(@PathVariable int id){
         veiculoService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
