@@ -18,8 +18,8 @@ public class VeiculoService {
 
 
     public Veiculo add(Veiculo veiculo){
-        if(veiculoRepository.existByPlaca(veiculo.getPlaca())){
-            throw new PlacaJaCadastradaException("A placa + " + veiculo.getPlaca() + " já foi cadastrada");
+        if(veiculoRepository.existsByPlaca(veiculo.getPlaca())){
+            throw new PlacaJaCadastradaException("A placa " + veiculo.getPlaca() + " já foi cadastrada");
         }
         veiculo.setStatusVeiculo(StatusVeiculo.DISPONIVEL);
         Veiculo result = veiculoRepository.save(veiculo);
