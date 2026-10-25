@@ -27,6 +27,10 @@ public class Aluguel {
     @JoinColumn(name = "id_cliente")
     private User cliente;
 
+    @ManyToOne
+    @JoinColumn(name = "id_funcionario")
+    private Funcionario funcionario;
+
     private double valorAluguel;
     private LocalDate dataInicio;
     private LocalDate dataTermino;

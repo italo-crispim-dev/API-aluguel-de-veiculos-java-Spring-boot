@@ -64,5 +64,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
     }
 
+    @ExceptionHandler(FuncionarioNaoEncontradoException.class)
+    private ResponseEntity<RestErrorMessage> FuncionarioNaoEncontradoHandler(FuncionarioNaoEncontradoException exception){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
+    }
+
 
 }

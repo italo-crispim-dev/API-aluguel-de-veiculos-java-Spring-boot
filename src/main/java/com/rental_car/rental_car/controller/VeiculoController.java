@@ -35,9 +35,9 @@ public class VeiculoController {
     }
 
     @PutMapping(value = "/{id}")
-    public Veiculo update(@PathVariable int id, @RequestBody Veiculo novosDados){
+    public ResponseEntity<Veiculo> update(@PathVariable int id, @RequestBody Veiculo novosDados){
         Veiculo veiculo = veiculoService.update(id, novosDados);
-        return veiculo;
+        return ResponseEntity.ok().body(veiculo);
     }
 
     @DeleteMapping(value = "/{id}")
