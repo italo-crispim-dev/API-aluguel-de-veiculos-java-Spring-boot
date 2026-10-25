@@ -37,6 +37,6 @@ public class FuncionarioService {
         Funcionario funcionario = findById(id);
         funcionario.setNome(novosDados.getNome());
         funcionario.setSalario(novosDados.getSalario());
-        return funcionario;
+        return funcionarioRepository.save(funcionario);
     }
 }
