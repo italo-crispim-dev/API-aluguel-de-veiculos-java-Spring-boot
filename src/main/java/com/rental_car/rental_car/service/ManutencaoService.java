@@ -96,6 +96,10 @@ public class ManutencaoService {
         Manutencao manutencao = buscarPorId(idManutencao);
         Veiculo veiculo = manutencao.getVeiculo();
 
+        if(!manutencaoRepository.existsById(idManutencao)){
+            throw new ManutencaoNaoEncontradaException("Manutencao de ID: " +idManutencao+ " não encontrada.");
+        }
+
         if(manutencao.getStatusManutencao() == StatusManutencao.FINALIZADA){
             throw new EstadoInvalidoException("Está manutenção ja foi finalizada");
         }
@@ -113,6 +117,11 @@ public class ManutencaoService {
 
     @Transactional
     public void deletar(int idManutencao){
+
+        if(!manutencaoRepository.existsById(idManutencao)){
+            throw new ManutencaoNaoEncontradaException("Manutencao de ID: " +idManutencao+ " não encontrada.");
+        }
+
         Manutencao manutencao = buscarPorId(idManutencao);
 
         if(manutencao.getStatusManutencao() == StatusManutencao.FINALIZADA){
