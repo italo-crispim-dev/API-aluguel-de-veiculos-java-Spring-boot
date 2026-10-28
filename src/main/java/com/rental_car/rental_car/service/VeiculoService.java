@@ -25,7 +25,9 @@ public class VeiculoService {
             throw new PlacaJaCadastradaException("A placa " + dto.getPlaca() + " já foi cadastrada");
         }
         Veiculo result = veiculoRepository.save(dto.toEntity());
+        //veiculo.setStatusVeiculo(StatusVeiculo.DISPONIVEL);
         return VeiculoResponseDTO.fromEntity(result);
+
     }
 
     public List<VeiculoResponseDTO> findAll(){
@@ -72,5 +74,7 @@ public class VeiculoService {
         veiculo.setValorDiaria(novosDados.getValorDiaria());
         return VeiculoResponseDTO.fromEntity(veiculoRepository.save(veiculo));
     }
+
+
 
 }
