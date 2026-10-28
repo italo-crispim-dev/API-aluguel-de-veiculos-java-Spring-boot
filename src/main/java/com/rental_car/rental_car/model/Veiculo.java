@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,7 +22,7 @@ public class Veiculo {
 
     private String placa;
     private String modelo;
-    private double valor_diaria;
+    private BigDecimal valorDiaria;
     private String marca;
 
     @Enumerated(EnumType.STRING)

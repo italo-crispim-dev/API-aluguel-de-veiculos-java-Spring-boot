@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -25,13 +26,13 @@ public class Aluguel {
 
     @ManyToOne
     @JoinColumn(name = "id_cliente")
-    private User cliente;
+    private Cliente cliente;
 
     @ManyToOne
     @JoinColumn(name = "id_funcionario")
     private Funcionario funcionario;
 
-    private double valorAluguel;
+    private BigDecimal valorAluguel;
     private LocalDate dataInicio;
     private LocalDate dataTermino;
 

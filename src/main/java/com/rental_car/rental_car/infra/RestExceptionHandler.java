@@ -70,5 +70,17 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
     }
 
+    @ExceptionHandler(VeiculoNaoPodeSerModificadoException.class)
+    private ResponseEntity<RestErrorMessage> VeiculoNaoPodeSerModificadoException(VeiculoNaoPodeSerModificadoException exception){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.CONFLICT, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(threatResponse);
+    }
+
+    @ExceptionHandler(DataInvalidaException.class)
+    private ResponseEntity<RestErrorMessage> DataInvalidaException(DataInvalidaException exception){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.CONFLICT, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(threatResponse);
+    }
+
 
 }

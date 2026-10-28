@@ -1,6 +1,6 @@
 package com.rental_car.rental_car.controller;
 
-import com.rental_car.rental_car.model.User;
+import com.rental_car.rental_car.model.Cliente;
 import com.rental_car.rental_car.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +16,17 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> add(@RequestBody User user){
-        return ResponseEntity.status(201).body(userService.add(user));
+    public ResponseEntity<Cliente> add(@RequestBody Cliente cliente){
+        return ResponseEntity.status(201).body(userService.add(cliente));
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<User> findById(@PathVariable int id){
+    public ResponseEntity<Cliente> findById(@PathVariable int id){
         return ResponseEntity.ok().body(userService.findById(id));
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> findAll() {
+    public ResponseEntity<List<Cliente>> findAll() {
         return ResponseEntity.ok().body(userService.findAll());
     }
 
@@ -37,8 +37,8 @@ public class UserController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<User> update(@PathVariable int id, @RequestBody User user){
-        return ResponseEntity.ok().body(userService.update(id, user));
+    public ResponseEntity<Cliente> update(@PathVariable int id, @RequestBody Cliente cliente){
+        return ResponseEntity.ok().body(userService.update(id, cliente));
     }
 
 }
