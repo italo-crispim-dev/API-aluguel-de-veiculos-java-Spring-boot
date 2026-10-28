@@ -70,5 +70,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
     }
 
+    @ExceptionHandler(EstadoInvalidoException.class)
+    private ResponseEntity<RestErrorMessage> estadoInvalidoHandler(EstadoInvalidoException exception){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.CONFLICT, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(threatResponse);
+
+    }
+
+    @ExceptionHandler(ManutencaoNaoEncontradaException.class)
+    private ResponseEntity<RestErrorMessage> manutencaoNaoEncontradaHandler(ManutencaoNaoEncontradaException exception){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.NOT_FOUND, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(threatResponse);
+    }
+
+
 
 }
