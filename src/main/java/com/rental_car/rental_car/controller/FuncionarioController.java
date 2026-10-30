@@ -1,5 +1,6 @@
 package com.rental_car.rental_car.controller;
 
+import com.rental_car.rental_car.dto.LoginRequestDto;
 import com.rental_car.rental_car.model.Funcionario;
 import com.rental_car.rental_car.model.Veiculo;
 import com.rental_car.rental_car.service.FuncionarioService;
@@ -20,7 +21,7 @@ public class FuncionarioController {
     @PostMapping
     public ResponseEntity<Funcionario> add(@RequestBody Funcionario funcionario){
         Funcionario result = funcionarioService.add(funcionario);
-        return ResponseEntity.status(201).body(funcionario);
+        return ResponseEntity.status(201).body(result);
 
     }
 
@@ -46,6 +47,12 @@ public class FuncionarioController {
     public ResponseEntity<Void> delete(@PathVariable int id){
         funcionarioService.deleteByID(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Funcionario> login(@RequestBody LoginRequestDto loginRequest){
+        Funcionario funcionario = funcionarioService.autenticar(loginRequest.getEmail(), loginRequest.getSenha());
+        return ResponseEntity.ok(funcionario);
     }
 
 
