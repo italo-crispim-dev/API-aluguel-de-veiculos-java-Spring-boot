@@ -3,18 +3,27 @@ package com.rental_car.rental_car.service;
 import com.rental_car.rental_car.exception.FuncionarioNaoEncontradoException;
 import com.rental_car.rental_car.model.Funcionario;
 import com.rental_car.rental_car.repository.FuncionarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FuncionarioService {
 
-    @Autowired
-    private FuncionarioRepository funcionarioRepository;
+    private final FuncionarioRepository funcionarioRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public FuncionarioService(FuncionarioRepository funcionarioRepository, PasswordEncoder passwordEncoder){
+        this.funcionarioRepository = funcionarioRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
 
     public Funcionario add(Funcionario funcionario){
+        String senhaCriptografada = passwordEncoder.encode(funcionario.getSenha());
+        funcionario.setSenha(senhaCriptografada);
         return funcionarioRepository.save(funcionario);
     }
 
@@ -38,5 +47,16 @@ public class FuncionarioService {
         funcionario.setNome(novosDados.getNome());
         funcionario.setSalario(novosDados.getSalario());
         return funcionarioRepository.save(funcionario);
+    }
+
+    public Funcionario autenticar(String email, String senha){
+        Funcionario funcionario = funcionarioRepository.findByEmail(email).
+                orElseThrow(() -> new FuncionarioNaoEncontradoException("Funcionario nao encontrado"));
+
+        if(!passwordEncoder.matches(senha, funcionario.getSenha())){
+            throw new RuntimeException("Senha incorreta");
+        }
+
+        return funcionario;
     }
 }
