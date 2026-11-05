@@ -33,13 +33,13 @@ public class AluguelService {
     private FuncionarioService funcionarioService;
 
     @Transactional
-    public AluguelResponseDto add(AluguelResquestDto dto){
+    public AluguelResponseDto add(AluguelResquestDto dto, String emailFuncionario){
 
         Cliente cliente = userService.findById(dto.getIdCliente());
 
         Veiculo veiculo = veiculoService.buscarEntidade(dto.getIdVeiculo());
 
-        Funcionario funcionario = funcionarioService.findById(dto.getIdFuncionario());
+        Funcionario funcionario = funcionarioService.findByEmail(emailFuncionario);
 
         if(veiculo.getStatusVeiculo() == StatusVeiculo.ALUGADO){
             throw new VeiculoIndisponivelException("O veiculo de ID " + veiculo.getId() + " está alugado no momento");

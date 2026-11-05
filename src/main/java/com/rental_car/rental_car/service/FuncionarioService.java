@@ -49,14 +49,9 @@ public class FuncionarioService {
         return funcionarioRepository.save(funcionario);
     }
 
-    public Funcionario autenticar(String email, String senha){
-        Funcionario funcionario = funcionarioRepository.findByEmail(email).
-                orElseThrow(() -> new FuncionarioNaoEncontradoException("Funcionario nao encontrado"));
-
-        if(!passwordEncoder.matches(senha, funcionario.getSenha())){
-            throw new RuntimeException("Senha incorreta");
-        }
-
-        return funcionario;
+    public Funcionario findByEmail(String email){
+        return funcionarioRepository.findByEmail(email).orElseThrow(() ->
+                new FuncionarioNaoEncontradoException("Funcionario com email " + email + " não foi encontrado"));
     }
+
 }
