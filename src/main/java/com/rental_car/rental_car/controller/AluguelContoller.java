@@ -8,6 +8,8 @@ import com.rental_car.rental_car.service.AluguelService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,8 +22,8 @@ public class AluguelContoller {
     private AluguelService aluguelService;
 
     @PostMapping
-    public ResponseEntity<AluguelResponseDto> add(@Valid @RequestBody AluguelResquestDto aluguel){
-        return ResponseEntity.status(201).body(aluguelService.add(aluguel));
+    public ResponseEntity<AluguelResponseDto> add(@Valid @RequestBody AluguelResquestDto aluguel, @AuthenticationPrincipal UserDetails userDetails){
+        return ResponseEntity.status(201).body(aluguelService.add(aluguel, userDetails.getUsername()));
     }
 
     @GetMapping(value = "/{id}")

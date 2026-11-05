@@ -1,8 +1,7 @@
 package com.rental_car.rental_car.controller;
 
-import com.rental_car.rental_car.dto.LoginRequestDto;
+import com.rental_car.rental_car.dto.FuncionarioResponseDto;
 import com.rental_car.rental_car.model.Funcionario;
-import com.rental_car.rental_car.model.Veiculo;
 import com.rental_car.rental_car.service.FuncionarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,15 +25,18 @@ public class FuncionarioController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Funcionario>> findAll(){
-        List<Funcionario> result = funcionarioService.findAll();
-        return ResponseEntity.ok().body(result);
+    public ResponseEntity<List<FuncionarioResponseDto>> findAll(){
+        List<Funcionario> funcionarios = funcionarioService.findAll();
+        List<FuncionarioResponseDto> response = funcionarios.stream().map(FuncionarioResponseDto::fromEntity).toList();
+        return ResponseEntity.ok().body(response);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Funcionario> findById(@PathVariable int id){
-        Funcionario result = funcionarioService.findById(id);
-        return ResponseEntity.ok().body(result);
+    public ResponseEntity<FuncionarioResponseDto> findById(@PathVariable int id){
+        Funcionario funcionario = funcionarioService.findById(id);
+
+        FuncionarioResponseDto response = FuncionarioResponseDto.fromEntity(funcionario);
+        return ResponseEntity.ok().body(response);
     }
 
     @PutMapping(value = "/{id}")
@@ -48,12 +50,5 @@ public class FuncionarioController {
         funcionarioService.deleteByID(id);
         return ResponseEntity.noContent().build();
     }
-
-    @PostMapping("/login")
-    public ResponseEntity<Funcionario> login(@RequestBody LoginRequestDto loginRequest){
-        Funcionario funcionario = funcionarioService.autenticar(loginRequest.getEmail(), loginRequest.getSenha());
-        return ResponseEntity.ok(funcionario);
-    }
-
 
 }

@@ -15,9 +15,6 @@ public class AluguelResquestDto {
     @NotNull(message = "O ID do cliente não pode ser vazio")
     private Integer idCliente;
 
-    @NotNull(message = "O ID do funcionario não pode ser vazio")
-    private Integer idFuncionario;
-
     @NotNull(message = "O ID do veiculo não pode ser vazio")
     private Integer idVeiculo;
 
