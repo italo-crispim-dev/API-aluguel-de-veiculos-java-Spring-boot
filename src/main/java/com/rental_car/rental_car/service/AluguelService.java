@@ -7,30 +7,26 @@ import com.rental_car.rental_car.exception.*;
 import com.rental_car.rental_car.model.*;
 
 import com.rental_car.rental_car.repository.AluguelRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Year;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-
+@RequiredArgsConstructor
 @Service
 public class AluguelService {
 
-    @Autowired
-    private AluguelRepository aluguelRepository;
 
-    @Autowired
-    private VeiculoService veiculoService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private FuncionarioService funcionarioService;
+    private final AluguelRepository aluguelRepository;
+    private final VeiculoService veiculoService;
+    private final UserService userService;
+    private final FuncionarioService funcionarioService;
 
     @Transactional
     public AluguelResponseDto add(AluguelResquestDto dto){
@@ -50,6 +46,15 @@ public class AluguelService {
         }
         if(dto.getDataInicio().isAfter(dto.getDataTermino())){
             throw new DataInvalidaException("A data de término deve ser depois da data de início");
+        }
+        boolean ocupado = aluguelRepository.existeSobreposicao(
+                dto.getIdVeiculo(),
+                dto.getDataInicio(),
+                dto.getDataTermino(),
+                List.of(StatusAluguel.FINALIZADO, StatusAluguel.CANCELADO)
+        );
+        if(ocupado){
+            throw new VeiculoIndisponivelException("Veiculo já alugado nesse periodo");
         }
 
         Long dias = ChronoUnit.DAYS.between(dto.getDataInicio(), dto.getDataTermino());
@@ -142,6 +147,39 @@ public class AluguelService {
     public List<AluguelResponseDto> findAll(){
         return aluguelRepository.findAll().stream().map(AluguelResponseDto::fromEntity).toList();
     }
+
+    public AluguelResponseDto cancelarAluguel(int id){
+        Aluguel aluguel = buscarEntidade(id);
+
+        if (aluguel.getStatusAluguel() == StatusAluguel.FINALIZADO){
+             throw new AluguelNaoPodeSerAlteradoException("Não é possivel cancelar um aluguel FINALIZADO ");
+        }
+        if (aluguel.getStatusAluguel() == StatusAluguel.CANCELADO){
+            throw new AluguelNaoPodeSerAlteradoException("Não é possivel cancelar um aluguel já CANCELADO");
+        }
+        if (aluguel.getStatusAluguel() == StatusAluguel.ATIVO){
+            throw new AluguelNaoPodeSerAlteradoException("Alugueis ativos só podem ser FINALIZADOS");
+        }
+
+        aluguel.setStatusAluguel(StatusAluguel.CANCELADO);
+        return AluguelResponseDto.fromEntity(aluguelRepository.save(aluguel));
+    }
+
+    public BigDecimal valorAluguelPorMes(int mes, int ano){
+        if(mes < 1 || mes > 12){
+            throw new ParametroInvalidoException("Mês deve estar entre 1 e 12");
+        }
+        int anoAtual = Year.now().getValue();
+        if (ano < 2025 || ano > anoAtual){
+            throw new ParametroInvalidoException("O ano deve estar entre 2025 e " + anoAtual);
+        }
+        return aluguelRepository.valorAluguelPorMes(StatusAluguel.FINALIZADO, mes, ano);
+    }
+
+    public List<AluguelResponseDto> findByCliente(int idCliente){
+        Cliente cliente = userService.findById(idCliente);
+        return aluguelRepository.findByClienteId(idCliente).stream().map(AluguelResponseDto::fromEntity).toList();
+   }
 
     private Aluguel buscarEntidade(int id){
         return aluguelRepository.findById(id)
