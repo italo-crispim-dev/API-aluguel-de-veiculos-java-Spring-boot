@@ -27,9 +27,6 @@ public class Funcionario {
     private String senha;
     private double salario;
 
-    @Enumerated(EnumType.STRING)
-    private Cargo cargo;
-
     @OneToMany(mappedBy = "funcionario")
     private List<Aluguel> alugueis;
 

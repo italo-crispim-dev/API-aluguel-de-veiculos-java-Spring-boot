@@ -20,6 +20,4 @@ public class Cliente {
     private String nome;
     private String email;
 
-    @Enumerated(EnumType.STRING)
-    private Cargo Cargo;
 }
