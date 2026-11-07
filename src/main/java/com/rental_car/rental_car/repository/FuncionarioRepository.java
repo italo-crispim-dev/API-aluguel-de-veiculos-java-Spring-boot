@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface FuncionarioRepository extends JpaRepository<Funcionario, Integer> {
 
-    @Query("select f from Funcionario f where f.email == :email and f.statusFuncionario = :status")
+    @Query("select f from Funcionario f where f.email = :email and f.statusFuncionario = :status")
     Optional<Funcionario> findByEmail(@Param("email") String email, @Param("status") StatusFuncionario status);
 
     boolean existsByEmail(String email);
