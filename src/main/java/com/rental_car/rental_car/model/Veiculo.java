@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,12 +21,26 @@ public class Veiculo {
     @Setter(AccessLevel.NONE)
     private int id;
 
+    @Column(nullable = false, unique = true)
     private String placa;
+
+    @Column(nullable = false)
     private String modelo;
+
+    @Column(name = "valor_diaria", nullable = false)
     private BigDecimal valorDiaria;
+
+    @Column(nullable = false)
     private String marca;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status_veiculo", nullable = false)
     private StatusVeiculo statusVeiculo;
+
+    @OneToMany(mappedBy = "veiculo")
+    private List<Aluguel> aluguels;
+
+    @OneToMany(mappedBy = "veiculo")
+    private List<Manutencao> manutencaoes;
 
 }

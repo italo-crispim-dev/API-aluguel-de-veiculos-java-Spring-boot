@@ -22,7 +22,6 @@ import java.util.List;
 @Service
 public class AluguelService {
 
-
     private final AluguelRepository aluguelRepository;
     private final VeiculoService veiculoService;
     private final UserService userService;

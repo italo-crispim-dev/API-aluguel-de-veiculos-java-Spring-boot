@@ -110,6 +110,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(threatResponse);
     }
 
+    @ExceptionHandler(FuncionarioNaoPodeSerModificadoException.class)
+    private ResponseEntity<RestErrorMessage> FuncionarioNaoPodeSerModificadoHandler(FuncionarioNaoPodeSerModificadoException exception){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.CONFLICT, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(threatResponse);
+    }
+
 
 
 }

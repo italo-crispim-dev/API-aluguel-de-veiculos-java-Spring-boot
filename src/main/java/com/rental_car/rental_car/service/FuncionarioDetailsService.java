@@ -1,6 +1,7 @@
 package com.rental_car.rental_car.service;
 
 import com.rental_car.rental_car.model.Funcionario;
+import com.rental_car.rental_car.model.StatusFuncionario;
 import com.rental_car.rental_car.repository.FuncionarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
@@ -16,7 +17,7 @@ public class FuncionarioDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username){
-        Funcionario funcionario = funcionarioRepository.findByEmail(username).
+        Funcionario funcionario = funcionarioRepository.findByEmail(username, StatusFuncionario.ATIVO).
                 orElseThrow(() -> new UsernameNotFoundException("Funcionario não encontrado"));
 
         return User.withUsername(funcionario.getEmail())

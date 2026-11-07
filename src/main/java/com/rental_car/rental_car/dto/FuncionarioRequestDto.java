@@ -28,4 +28,5 @@ public class FuncionarioRequestDto {
     private BigDecimal salario;
 
 
+
 }

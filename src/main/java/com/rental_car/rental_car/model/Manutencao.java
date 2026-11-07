@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @NoArgsConstructor
@@ -17,11 +18,17 @@ public class Manutencao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(nullable = false)
     private String descricao;
+
+    @Column(name = "data_manuntencao", nullable = false)
     private LocalDate dataManutencao;
-    private double valor;
+
+    @Column(nullable = false)
+    private BigDecimal valor;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status_manuntencao", nullable = false)
     private StatusManutencao statusManutencao;
 
     @ManyToOne

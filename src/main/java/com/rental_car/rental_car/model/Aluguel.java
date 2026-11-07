@@ -32,12 +32,17 @@ public class Aluguel {
     @JoinColumn(name = "id_funcionario")
     private Funcionario funcionario;
 
+    @Column(name = "valor_aluguel", nullable = false)
     private BigDecimal valorAluguel;
+
+    @Column(name = "data_inicio", nullable = false)
     private LocalDate dataInicio;
+
+    @Column(name = "data_termino", nullable = false)
     private LocalDate dataTermino;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status_aluguel", nullable = false)
     private StatusAluguel statusAluguel;
-
 
 }

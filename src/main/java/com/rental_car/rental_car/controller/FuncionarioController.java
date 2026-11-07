@@ -15,7 +15,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/funcionarios")
-@Validated
 @RequiredArgsConstructor
 public class FuncionarioController {
 
@@ -30,17 +29,14 @@ public class FuncionarioController {
 
     @GetMapping
     public ResponseEntity<List<FuncionarioResponseDto>> findAll(){
-        List<Funcionario> funcionarios = funcionarioService.findAll();
-        List<FuncionarioResponseDto> response = funcionarios.stream().map(FuncionarioResponseDto::fromEntity).toList();
+        List<FuncionarioResponseDto> response = funcionarioService.findAll();
         return ResponseEntity.ok().body(response);
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<FuncionarioResponseDto> findById(@PathVariable int id){
-        Funcionario funcionario = funcionarioService.findById(id);
-
-        FuncionarioResponseDto response = FuncionarioResponseDto.fromEntity(funcionario);
-        return ResponseEntity.ok().body(response);
+        FuncionarioResponseDto funcionario = funcionarioService.findById(id);
+        return ResponseEntity.ok().body(funcionario);
     }
 
     @PutMapping(value = "/{id}")
@@ -49,9 +45,15 @@ public class FuncionarioController {
         return ResponseEntity.ok().body(funcionario);
     }
 
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> delete(@PathVariable int id){
-        funcionarioService.deleteByID(id);
+    @PatchMapping(value = "/inativar{id}")
+    public ResponseEntity<Void> inativar(@PathVariable int id){
+        funcionarioService.inativarFuncionario(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping(value = "/ativar{id}")
+    public ResponseEntity<Void> ativar(@PathVariable int id){
+        funcionarioService.ativarFuncionario(id);
         return ResponseEntity.noContent().build();
     }
 
