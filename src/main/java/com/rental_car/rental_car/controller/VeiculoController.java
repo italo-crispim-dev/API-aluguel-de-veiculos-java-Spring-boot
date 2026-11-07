@@ -6,18 +6,21 @@ import com.rental_car.rental_car.model.Veiculo;
 import com.rental_car.rental_car.repository.VeiculoRepository;
 import com.rental_car.rental_car.service.VeiculoService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/veiculos")
+@RequiredArgsConstructor
+@Validated
 public class VeiculoController {
 
-    @Autowired
-    private VeiculoService veiculoService;
+    private final VeiculoService veiculoService;
 
     @PostMapping
     public ResponseEntity<VeiculoResponseDTO> add(@Valid @RequestBody VeiculoRequestDTO veiculo){

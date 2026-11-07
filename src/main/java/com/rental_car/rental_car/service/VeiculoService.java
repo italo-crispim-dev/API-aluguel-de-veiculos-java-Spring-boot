@@ -9,15 +9,16 @@ import com.rental_car.rental_car.exception.VeiculoNaoPodeSerModificadoException;
 import com.rental_car.rental_car.model.StatusVeiculo;
 import com.rental_car.rental_car.model.Veiculo;
 import com.rental_car.rental_car.repository.VeiculoRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class VeiculoService {
 
-    @Autowired
-    private VeiculoRepository veiculoRepository;
+    private final VeiculoRepository veiculoRepository;
 
 
     public VeiculoResponseDTO add(VeiculoRequestDTO dto){

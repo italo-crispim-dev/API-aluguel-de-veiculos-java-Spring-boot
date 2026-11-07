@@ -3,16 +3,17 @@ package com.rental_car.rental_car.service;
 import com.rental_car.rental_car.exception.UserNaoEncontradoException;
 import com.rental_car.rental_car.model.Cliente;
 import com.rental_car.rental_car.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public Cliente add(Cliente cliente){
         return userRepository.save(cliente);

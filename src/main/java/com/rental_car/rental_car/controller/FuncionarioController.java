@@ -5,6 +5,7 @@ import com.rental_car.rental_car.dto.FuncionarioResponseDto;
 import com.rental_car.rental_car.model.Funcionario;
 import com.rental_car.rental_car.service.FuncionarioService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -15,10 +16,10 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/funcionarios")
 @Validated
+@RequiredArgsConstructor
 public class FuncionarioController {
 
-    @Autowired
-    private FuncionarioService funcionarioService;
+    private final FuncionarioService funcionarioService;
 
     @PostMapping
     public ResponseEntity<FuncionarioResponseDto> add(@Valid  @RequestBody FuncionarioRequestDto funcionario){

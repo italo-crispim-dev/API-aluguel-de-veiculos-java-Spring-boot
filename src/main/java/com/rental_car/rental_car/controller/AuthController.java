@@ -3,6 +3,7 @@ package com.rental_car.rental_car.controller;
 import com.rental_car.rental_car.dto.LoginRequestDto;
 import com.rental_car.rental_car.dto.LoginResponseDto;
 import com.rental_car.rental_car.service.JwtService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,14 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-
-    public AuthController(AuthenticationManager authenticationManager, JwtService jwtService){
-        this.authenticationManager = authenticationManager;
-        this.jwtService = jwtService;
-    }
 
     @PostMapping("/login")
     public LoginResponseDto login(@RequestBody LoginRequestDto request){

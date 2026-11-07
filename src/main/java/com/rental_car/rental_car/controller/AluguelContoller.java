@@ -6,11 +6,13 @@ import com.rental_car.rental_car.dto.AluguelUpdateDto;
 import com.rental_car.rental_car.model.Aluguel;
 import com.rental_car.rental_car.service.AluguelService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -18,10 +20,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/alugueis")
+@RequiredArgsConstructor
+@Validated
 public class AluguelContoller {
 
-    @Autowired
-    private AluguelService aluguelService;
+    private final AluguelService aluguelService;
 
     @PostMapping
     public ResponseEntity<AluguelResponseDto> add(@Valid @RequestBody AluguelResquestDto aluguel, @AuthenticationPrincipal UserDetails userDetails){

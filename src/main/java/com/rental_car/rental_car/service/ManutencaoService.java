@@ -9,6 +9,7 @@ import com.rental_car.rental_car.model.StatusVeiculo;
 import com.rental_car.rental_car.model.Veiculo;
 import com.rental_car.rental_car.repository.ManutencaoRepository;
 import com.rental_car.rental_car.repository.VeiculoRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,13 +17,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class ManutencaoService {
-    @Autowired
-    private ManutencaoRepository manutencaoRepository;
 
-    @Autowired
-    private VeiculoRepository veiculoRepository;
+    private final ManutencaoRepository manutencaoRepository;
+    private final VeiculoRepository veiculoRepository;
 
     public Manutencao add(Manutencao manutencao){
         int idVeiculo = manutencao.getVeiculo().getId();

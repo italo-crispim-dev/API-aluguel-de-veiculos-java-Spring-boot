@@ -2,6 +2,7 @@ package com.rental_car.rental_car.controller;
 
 import com.rental_car.rental_car.model.Manutencao;
 import com.rental_car.rental_car.service.ManutencaoService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,9 +12,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/manutencoes")
+@RequiredArgsConstructor
 public class ManutencaoController {
-    @Autowired
-    private ManutencaoService manutencaoService;
+    private final ManutencaoService manutencaoService;
 
     @PostMapping
     public ResponseEntity<Manutencao> adicionar(@RequestBody Manutencao manutencao){
