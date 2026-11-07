@@ -1,5 +1,8 @@
 package com.rental_car.rental_car.service;
 
+import com.rental_car.rental_car.dto.FuncionarioRequestDto;
+import com.rental_car.rental_car.dto.FuncionarioResponseDto;
+import com.rental_car.rental_car.exception.EmailJaCadastradoException;
 import com.rental_car.rental_car.exception.FuncionarioNaoEncontradoException;
 import com.rental_car.rental_car.model.Funcionario;
 import com.rental_car.rental_car.repository.FuncionarioRepository;
@@ -21,10 +24,20 @@ public class FuncionarioService {
     }
 
 
-    public Funcionario add(Funcionario funcionario){
-        String senhaCriptografada = passwordEncoder.encode(funcionario.getSenha());
+    public FuncionarioResponseDto add(FuncionarioRequestDto funcionarioDto){
+
+        if(funcionarioRepository.existsByEmail(funcionarioDto.getEmail())){
+            throw new EmailJaCadastradoException("O email informado já existe no sistema");
+        }
+        Funcionario funcionario = new Funcionario();
+
+        funcionario.setNome(funcionarioDto.getNome());
+        funcionario.setSalario(funcionarioDto.getSalario());
+        funcionario.setEmail(funcionario.getEmail());
+
+        String senhaCriptografada = passwordEncoder.encode(funcionarioDto.getSenha());
         funcionario.setSenha(senhaCriptografada);
-        return funcionarioRepository.save(funcionario);
+        return FuncionarioResponseDto.fromEntity(funcionarioRepository.save(funcionario));
     }
 
     public Funcionario findById(int id){
@@ -42,11 +55,18 @@ public class FuncionarioService {
         return;
     }
 
-    public Funcionario update(int id, Funcionario novosDados){
+    public FuncionarioResponseDto update(int id, FuncionarioRequestDto novosDados){
         Funcionario funcionario = findById(id);
         funcionario.setNome(novosDados.getNome());
         funcionario.setSalario(novosDados.getSalario());
-        return funcionarioRepository.save(funcionario);
+        if(funcionarioRepository.existsByEmailAndIdNot(novosDados.getEmail(), id)){
+            throw new EmailJaCadastradoException("Email já cadastrado");
+        }
+        funcionario.setEmail(novosDados.getEmail());
+        String senhaCriptografada = passwordEncoder.encode(novosDados.getSenha());
+        funcionario.setSenha(senhaCriptografada);
+
+        return FuncionarioResponseDto.fromEntity(funcionarioRepository.save(funcionario));
     }
 
     public Funcionario findByEmail(String email){

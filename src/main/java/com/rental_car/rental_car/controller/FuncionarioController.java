@@ -1,25 +1,28 @@
 package com.rental_car.rental_car.controller;
 
+import com.rental_car.rental_car.dto.FuncionarioRequestDto;
 import com.rental_car.rental_car.dto.FuncionarioResponseDto;
 import com.rental_car.rental_car.model.Funcionario;
 import com.rental_car.rental_car.service.FuncionarioService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(value = "/funcionarios")
-
+@Validated
 public class FuncionarioController {
 
     @Autowired
     private FuncionarioService funcionarioService;
 
     @PostMapping
-    public ResponseEntity<Funcionario> add(@RequestBody Funcionario funcionario){
-        Funcionario result = funcionarioService.add(funcionario);
+    public ResponseEntity<FuncionarioResponseDto> add(@Valid  @RequestBody FuncionarioRequestDto funcionario){
+        FuncionarioResponseDto result = funcionarioService.add(funcionario);
         return ResponseEntity.status(201).body(result);
 
     }
@@ -40,8 +43,8 @@ public class FuncionarioController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Funcionario> update(@PathVariable int id, @RequestBody Funcionario novosDados){
-        Funcionario funcionario = funcionarioService.update(id, novosDados);
+    public ResponseEntity<FuncionarioResponseDto> update(@PathVariable int id, @Valid @RequestBody FuncionarioRequestDto novosDados){
+        FuncionarioResponseDto funcionario = funcionarioService.update(id, novosDados);
         return ResponseEntity.ok().body(funcionario);
     }
 

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @NoArgsConstructor
@@ -25,7 +26,7 @@ public class Funcionario {
     private String email;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
-    private double salario;
+    private BigDecimal salario;
 
     @OneToMany(mappedBy = "funcionario")
     private List<Aluguel> alugueis;

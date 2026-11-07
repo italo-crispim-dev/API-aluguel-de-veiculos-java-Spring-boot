@@ -4,6 +4,8 @@ import com.rental_car.rental_car.model.Funcionario;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 public class FuncionarioResponseDto {
@@ -11,7 +13,7 @@ public class FuncionarioResponseDto {
     private int id;
     private String nome;
     private String email;
-    private double salario;
+    private BigDecimal salario;
 
     public static FuncionarioResponseDto fromEntity(Funcionario funcionario){
         FuncionarioResponseDto dto = new FuncionarioResponseDto();
