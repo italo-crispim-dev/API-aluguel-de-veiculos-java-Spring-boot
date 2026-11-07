@@ -104,6 +104,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(threatResponse);
     }
 
+    @ExceptionHandler(EmailJaCadastradoException.class)
+    private ResponseEntity<RestErrorMessage> EmailJaCadastradoHandler(EmailJaCadastradoException exception){
+        RestErrorMessage threatResponse = new RestErrorMessage(HttpStatus.CONFLICT, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(threatResponse);
+    }
+
 
 
 }
