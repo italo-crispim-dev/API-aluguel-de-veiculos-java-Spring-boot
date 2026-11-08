@@ -45,13 +45,13 @@ public class FuncionarioController {
         return ResponseEntity.ok().body(funcionario);
     }
 
-    @PatchMapping(value = "/inativar{id}")
+    @PatchMapping(value = "/inativar/{id}")
     public ResponseEntity<Void> inativar(@PathVariable int id){
         funcionarioService.inativarFuncionario(id);
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping(value = "/ativar{id}")
+    @PatchMapping(value = "/ativar/{id}")
     public ResponseEntity<Void> ativar(@PathVariable int id){
         funcionarioService.ativarFuncionario(id);
         return ResponseEntity.noContent().build();
