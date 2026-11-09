@@ -67,7 +67,11 @@ public class AluguelContoller {
         return ResponseEntity.ok().body(aluguelService.cancelarAluguel(id));
     }
 
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable int id){
+        aluguelService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 
 
 }

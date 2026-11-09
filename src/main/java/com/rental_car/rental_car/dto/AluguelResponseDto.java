@@ -1,5 +1,6 @@
 package com.rental_car.rental_car.dto;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.rental_car.rental_car.model.Aluguel;
 import com.rental_car.rental_car.model.StatusAluguel;
 import lombok.Getter;
@@ -10,6 +11,21 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+@JsonPropertyOrder({
+        "id",
+        "idCliente",
+        "nomeCliente",
+        "idFuncionario",
+        "nomeFuncionario",
+        "idVeiculo",
+        "placaVeiculo",
+        "modeloVeiculo",
+        "marcaVeiculo",
+        "dataInicio",
+        "dataTermino",
+        "valorAluguel",
+        "statusAluguel"
+})
 public class AluguelResponseDto {
 
     private int id;
