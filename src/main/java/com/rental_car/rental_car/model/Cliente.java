@@ -1,5 +1,6 @@
 package com.rental_car.rental_car.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class Cliente {
     private String email;
 
     @OneToMany(mappedBy = "cliente")
+    @JsonIgnore
     private List<Aluguel> alugueis;
 
 }

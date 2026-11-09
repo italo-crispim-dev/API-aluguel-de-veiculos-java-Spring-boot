@@ -8,7 +8,6 @@ import com.rental_car.rental_car.model.*;
 
 import com.rental_car.rental_car.repository.AluguelRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,13 +23,13 @@ public class AluguelService {
 
     private final AluguelRepository aluguelRepository;
     private final VeiculoService veiculoService;
-    private final UserService userService;
+    private final ClienteService clienteService;
     private final FuncionarioService funcionarioService;
 
     @Transactional
     public AluguelResponseDto add(AluguelResquestDto dto, String emailFuncionario){
 
-        Cliente cliente = userService.findById(dto.getIdCliente());
+        Cliente cliente = clienteService.findById(dto.getIdCliente());
 
         Veiculo veiculo = veiculoService.buscarEntidade(dto.getIdVeiculo());
 
@@ -183,7 +182,7 @@ public class AluguelService {
     }
 
     public List<AluguelResponseDto> findByCliente(int idCliente){
-        Cliente cliente = userService.findById(idCliente);
+        Cliente cliente = clienteService.findById(idCliente);
         return aluguelRepository.findByClienteId(idCliente).stream().map(AluguelResponseDto::fromEntity).toList();
    }
 
@@ -191,6 +190,20 @@ public class AluguelService {
         return aluguelRepository.findById(id)
                 .orElseThrow(() ->
                         new AluguelNaoEncontradoException("Aluguel de ID "+ id + " não encontrado"));
+    }
+
+    @Transactional
+    public void delete(int id){
+        Aluguel aluguel = buscarEntidade(id);
+        if(aluguel.getStatusAluguel() == StatusAluguel.ATIVO){
+            throw new AluguelNaoPodeSerAlteradoException("Não é possivel excluir um aluguel ATIVO");
+        }
+
+        if(aluguel.getStatusAluguel() == StatusAluguel.FINALIZADO){
+            throw new AluguelNaoPodeSerAlteradoException("Não é possivel excluir um aluguel FINALIZADO");
+        }
+
+        aluguelRepository.delete(aluguel);
     }
 
 

@@ -1,5 +1,6 @@
 package com.rental_car.rental_car.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -38,9 +39,11 @@ public class Veiculo {
     private StatusVeiculo statusVeiculo;
 
     @OneToMany(mappedBy = "veiculo")
+    @JsonIgnore
     private List<Aluguel> aluguels;
 
     @OneToMany(mappedBy = "veiculo")
+    @JsonIgnore
     private List<Manutencao> manutencaoes;
 
 }

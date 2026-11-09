@@ -1,5 +1,6 @@
 package com.rental_car.rental_car.model;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
