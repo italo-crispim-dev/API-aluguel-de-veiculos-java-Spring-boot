@@ -36,15 +36,14 @@ public class AluguelService {
 
         Funcionario funcionario = funcionarioService.findByEmail(emailFuncionario);
 
-        if(veiculo.getStatusVeiculo() == StatusVeiculo.ALUGADO){
-            throw new VeiculoIndisponivelException("O veiculo de ID " + veiculo.getId() + " está alugado no momento");
-        }
-
         if(veiculo.getStatusVeiculo() == StatusVeiculo.MANUNTENCAO){
             throw new VeiculoIndisponivelException("O veiculo de ID " + veiculo.getId() + " está em Manutenção no momento");
         }
         if(dto.getDataInicio().isAfter(dto.getDataTermino())){
             throw new DataInvalidaException("A data de término deve ser depois da data de início");
+        }
+        if(dto.getDataInicio().isBefore(LocalDate.now())){
+            throw new DataInvalidaException("A data de inicio não pode está no passado");
         }
         boolean ocupado = aluguelRepository.existeSobreposicao(
                 dto.getIdVeiculo(),
@@ -56,7 +55,7 @@ public class AluguelService {
             throw new VeiculoIndisponivelException("Veiculo já alugado nesse periodo");
         }
 
-        Long dias = ChronoUnit.DAYS.between(dto.getDataInicio(), dto.getDataTermino());
+        Long dias = Math.max(1L, ChronoUnit.DAYS.between(dto.getDataInicio(), dto.getDataTermino()));
 
         Aluguel aluguel = new Aluguel();
         aluguel.setVeiculo(veiculo);
@@ -82,11 +81,8 @@ public class AluguelService {
 
         Aluguel aluguel = buscarEntidade(id);
 
-        if (aluguel.getStatusAluguel().equals(StatusAluguel.FINALIZADO)){
-            throw new AluguelNaoPodeSerFinalizadoException("Não é possivel finalizar um aluguel que já terminou");
-        }
-        if (aluguel.getStatusAluguel().equals(StatusAluguel.CANCELADO)){
-            throw new AluguelNaoPodeSerFinalizadoException("Não é possivel finalizar um aluguel que foi cancelado");
+        if(aluguel.getStatusAluguel() != StatusAluguel.ATIVO){
+            throw new AluguelNaoPodeSerFinalizadoException("Só é possivel finalizar um aluguel com status ATIVO");
         }
 
         aluguel.setStatusAluguel(StatusAluguel.FINALIZADO);
@@ -125,9 +121,19 @@ public class AluguelService {
         }
         aluguel.setDataTermino(novosDados.getDataTermino());
 
-        Veiculo veiculo = veiculoService.buscarEntidade(aluguel.getVeiculo().getId());
-        Long dias = ChronoUnit.DAYS.between(aluguel.getDataInicio(), aluguel.getDataTermino());
-        BigDecimal valor = veiculo.getValorDiaria();
+        boolean ocupado = aluguelRepository.existeSobreposicaoExcluindo(
+                aluguel.getVeiculo().getId(),
+                aluguel.getId(),
+                aluguel.getDataInicio(),
+                aluguel.getDataTermino(),
+                List.of(StatusAluguel.FINALIZADO, StatusAluguel.CANCELADO)
+        );
+        if(ocupado){
+            throw new VeiculoIndisponivelException("Veiculo já alugado nesse periodo");
+        }
+
+        Long dias = Math.max(1L, ChronoUnit.DAYS.between(aluguel.getDataInicio(), aluguel.getDataTermino()));
+        BigDecimal valor = aluguel.getVeiculo().getValorDiaria();
         aluguel.setValorAluguel(valor.multiply(BigDecimal.valueOf(dias)));
 
         return AluguelResponseDto.fromEntity(aluguelRepository.save(aluguel));
@@ -147,6 +153,7 @@ public class AluguelService {
         return aluguelRepository.findAll().stream().map(AluguelResponseDto::fromEntity).toList();
     }
 
+    @Transactional
     public AluguelResponseDto cancelarAluguel(int id){
         Aluguel aluguel = buscarEntidade(id);
 
