@@ -9,13 +9,12 @@ import com.rental_car.rental_car.model.StatusVeiculo;
 import com.rental_car.rental_car.model.Veiculo;
 import com.rental_car.rental_car.repository.ManutencaoRepository;
 import com.rental_car.rental_car.repository.VeiculoRepository;
+import com.rental_car.rental_car.repository.ManutencaoRepository.MarcaManutencaoProjection;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -138,5 +137,10 @@ public class ManutencaoService {
         }
 
         manutencaoRepository.delete(manutencao);
+    }
+
+    //Consultas
+    public List<MarcaManutencaoProjection> buscarMarcasComMaisManutencoes(){
+        return manutencaoRepository.buscarMarcasComMaisManutencoes();
     }
 }

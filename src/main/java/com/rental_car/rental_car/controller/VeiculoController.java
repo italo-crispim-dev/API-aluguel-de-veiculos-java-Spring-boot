@@ -2,12 +2,10 @@ package com.rental_car.rental_car.controller;
 
 import com.rental_car.rental_car.dto.VeiculoRequestDTO;
 import com.rental_car.rental_car.dto.VeiculoResponseDTO;
-import com.rental_car.rental_car.model.Veiculo;
-import com.rental_car.rental_car.repository.VeiculoRepository;
+import com.rental_car.rental_car.repository.VeiculoRepository.MarcaAlugadaProjection;
 import com.rental_car.rental_car.service.VeiculoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -50,5 +48,11 @@ public class VeiculoController {
     public ResponseEntity<Void> delete(@PathVariable int id){
         veiculoService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    //consultas
+    @GetMapping("/relatorio/marcas")
+    public ResponseEntity<List<MarcaAlugadaProjection>> buscarMarcaMaisAlugada(){
+        return ResponseEntity.ok(veiculoService.buscarMarcaMaisAlugada());
     }
 }

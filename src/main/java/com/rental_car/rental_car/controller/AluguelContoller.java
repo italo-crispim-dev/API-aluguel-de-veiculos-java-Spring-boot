@@ -3,11 +3,10 @@ package com.rental_car.rental_car.controller;
 import com.rental_car.rental_car.dto.AluguelResponseDto;
 import com.rental_car.rental_car.dto.AluguelResquestDto;
 import com.rental_car.rental_car.dto.AluguelUpdateDto;
-import com.rental_car.rental_car.model.Aluguel;
+import com.rental_car.rental_car.repository.AluguelRepository.MelhorFuncionarioProjection;
 import com.rental_car.rental_car.service.AluguelService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -71,6 +70,12 @@ public class AluguelContoller {
     public ResponseEntity<Void> deletar(@PathVariable int id){
         aluguelService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    //consultas
+    @GetMapping("relatorio/funcionarios")
+    public ResponseEntity<List<MelhorFuncionarioProjection>> buscarPorMelhorFuncionario(){
+        return ResponseEntity.ok(aluguelService.buscarPorMelhorFuncionario());
     }
 
 

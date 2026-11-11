@@ -7,6 +7,7 @@ import com.rental_car.rental_car.exception.*;
 import com.rental_car.rental_car.model.*;
 
 import com.rental_car.rental_car.repository.AluguelRepository;
+import com.rental_car.rental_car.repository.AluguelRepository.MelhorFuncionarioProjection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -204,6 +205,11 @@ public class AluguelService {
         }
 
         aluguelRepository.delete(aluguel);
+    }
+
+    //consultas
+    public List<MelhorFuncionarioProjection> buscarPorMelhorFuncionario(){
+        return aluguelRepository.buscarPorMelhorFuncionario();
     }
 
 

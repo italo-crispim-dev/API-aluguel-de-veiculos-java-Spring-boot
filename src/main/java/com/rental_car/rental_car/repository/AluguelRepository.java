@@ -3,14 +3,12 @@ package com.rental_car.rental_car.repository;
 import com.rental_car.rental_car.model.Aluguel;
 import com.rental_car.rental_car.model.StatusAluguel;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Locale;
 
 public interface AluguelRepository extends JpaRepository<Aluguel, Integer> {
 
@@ -54,6 +52,26 @@ public interface AluguelRepository extends JpaRepository<Aluguel, Integer> {
             @Param("dataTermino") LocalDate dataTermino,
             @Param("statusIgnorados") List<StatusAluguel> statusIgnorados);
 
+    //consultas
+    public interface MelhorFuncionarioProjection{
+        Integer getId();
+
+        String getNome();
+
+        Long getTotalAlugueis();
+    }
+    @Query(value = """
+    SELECT 
+        f.id AS id,
+        f.nome AS nome,
+        COUNT(a.id) AS totalAlugueis
+    FROM tb_funcionario f
+    INNER JOIN tb_aluguel a
+        ON f.id= a.id_funcionario
+    GROUP BY f.id, f.nome
+    ORDER BY totalAlugueis DESC
+    """, nativeQuery = true)
+    List<MelhorFuncionarioProjection> buscarPorMelhorFuncionario();
 
 
 }
