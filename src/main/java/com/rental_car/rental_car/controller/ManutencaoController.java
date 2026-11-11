@@ -1,9 +1,10 @@
 package com.rental_car.rental_car.controller;
 
 import com.rental_car.rental_car.model.Manutencao;
+import com.rental_car.rental_car.repository.ManutencaoRepository.MarcaManutencaoProjection;
 import com.rental_car.rental_car.service.ManutencaoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,5 +50,11 @@ public class ManutencaoController {
     public ResponseEntity<Void> deletar(@PathVariable int id){
         manutencaoService.deletar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    //consultas
+    @GetMapping("/relatorio/marcas")
+    public ResponseEntity<List<MarcaManutencaoProjection>> buscarMarcasComMaisManutencoes(){
+        return ResponseEntity.ok(manutencaoService.buscarMarcasComMaisManutencoes());
     }
 }
