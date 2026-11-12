@@ -10,6 +10,24 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+
+//Comando de criação equivalente em SQL
+/*[ create table tb_aluguel (
+        id integer not null auto_increment,
+        id_cliente integer,
+        id_funcionario integer,
+        id_veiculo integer,
+        data_inicio date not null,
+        data_termino date not null,
+        valor_aluguel decimal(38,2) not null,
+        status_aluguel enum ('AGENDADO','ATIVO','CANCELADO','FINALIZADO') not null,
+        primary key (id),
+        constraint fk_aluguel_cliente foreign key (id_cliente) references tb_cliente (id),
+        constraint fk_aluguel_funcionario foreign key (id_funcionario) references tb_funcionario (id),
+        constraint fk_aluguel_veiculo foreign key (id_veiculo) references tb_veiculo (id)
+    ) engine=InnoDB
+*/
+
 @Entity
 @Getter
 @Setter

@@ -10,6 +10,18 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.util.List;
 
+//Comando de criação equivalente em SQL
+/* create table tb_veiculo (
+        id integer not null auto_increment,
+        marca varchar(255) not null,
+        modelo varchar(255) not null,
+        placa varchar(255) not null unique,
+        valor_diaria decimal(38,2) not null,
+        status_veiculo enum ('ALUGADO','DISPONIVEL','MANUNTENCAO') not null,
+        primary key (id)
+    ) engine=InnoDB
+*/
+
 @Getter
 @Setter
 @NoArgsConstructor

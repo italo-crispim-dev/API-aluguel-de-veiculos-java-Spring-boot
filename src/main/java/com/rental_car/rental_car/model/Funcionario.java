@@ -10,6 +10,18 @@ import lombok.Setter;
 import java.math.BigDecimal;
 import java.util.List;
 
+//Comando de criação equivalente em SQL
+/* create table tb_funcionario (
+        id integer not null auto_increment,
+        salario decimal(38,2) not null,
+        email varchar(255) not null unique,
+        nome varchar(255) not null,
+        senha varchar(255) not null,
+        status_funcionario enum ('ATIVO','INATIVO') not null,
+        primary key (id)
+    ) engine=InnoDB
+*/
+
 @NoArgsConstructor
 @Entity
 @Getter

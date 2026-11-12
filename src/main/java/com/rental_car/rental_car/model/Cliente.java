@@ -9,6 +9,15 @@ import lombok.Setter;
 
 import java.util.List;
 
+//Comando de criação equivalente em SQL
+/* create table tb_cliente (
+        id integer not null auto_increment,
+        email varchar(255) not null unique,
+        nome varchar(255) not null,
+        primary key (id)
+    ) engine=InnoDB
+*/
+
 @Getter
 @Setter
 @NoArgsConstructor

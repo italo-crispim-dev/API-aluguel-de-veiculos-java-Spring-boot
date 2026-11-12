@@ -27,14 +27,23 @@ public class AluguelService {
     private final ClienteService clienteService;
     private final FuncionarioService funcionarioService;
 
+    //Comando de inserção equivalente ao SQL
+    /* INSERT INTO tb_aluguel
+        (id_cliente, id_funcionario, id_veiculo, data_inicio, data_termino, valor_aluguel, status_aluguel)
+        VALUES (1,2,3, '2026-11-20', '2026-11-23', 600.00, 'AGENDADO');
+    */
     @Transactional
     public AluguelResponseDto add(AluguelResquestDto dto, String emailFuncionario){
 
+        //Equivalente em SQL
+        // SELECT * from tb_cliente where id = 1;
         Cliente cliente = clienteService.findById(dto.getIdCliente());
 
-        Veiculo veiculo = veiculoService.buscarEntidade(dto.getIdVeiculo());
-
+        // SELECT * from tb_funcionario where id = 2;
         Funcionario funcionario = funcionarioService.findByEmail(emailFuncionario);
+
+        // SELECT * from tb_veiculo where id = 3;
+        Veiculo veiculo = veiculoService.buscarEntidade(dto.getIdVeiculo());
 
         if(veiculo.getStatusVeiculo() == StatusVeiculo.MANUNTENCAO){
             throw new VeiculoIndisponivelException("O veiculo de ID " + veiculo.getId() + " está em Manutenção no momento");
@@ -70,6 +79,9 @@ public class AluguelService {
         }
         else{
             aluguel.setStatusAluguel(StatusAluguel.ATIVO);
+
+            //Equivalente em SQL
+            // UPDATE tb_veiculos SET status_veiculo = 'ALUGADO' where id = 3;
             veiculo.setStatusVeiculo(StatusVeiculo.ALUGADO);
         }
 
@@ -139,6 +151,8 @@ public class AluguelService {
         return AluguelResponseDto.fromEntity(aluguelRepository.save(aluguel));
     }
 
+    //Equivalente em SQL
+    // SELECT * FROM tb_aluguel WHERE id = 1;
     public AluguelResponseDto findById(int id){
        Aluguel aluguel = aluguelRepository.findById(id)
                 .orElseThrow(() ->
@@ -148,7 +162,8 @@ public class AluguelService {
        return AluguelResponseDto.fromEntity(aluguel);
     }
 
-
+    //Equivalente em SQL
+    // SELECT * FROM tb_aluguel;
     public List<AluguelResponseDto> findAll(){
         return aluguelRepository.findAll().stream().map(AluguelResponseDto::fromEntity).toList();
     }
