@@ -38,13 +38,23 @@ public interface AluguelRepository extends JpaRepository<Aluguel, Integer> {
             );
 
     @Query("""
-    SELECT COUNT(a) > 0 FROM Aluguel a
+    SELECT COUNT(a) > 0 
+    FROM Aluguel a
     WHERE a.veiculo.id = :idVeiculo
       AND a.id <> :idAluguel
       AND a.statusAluguel NOT IN :statusIgnorados
       AND a.dataInicio <= :dataTermino
       AND a.dataTermino >= :dataInicio
 """)
+/*Em SQL
+    SELECT COUNT(*) > 0
+    FROM tb_aluguel
+    WHERE id_veiculo = ?
+    AND id <> ?
+    AND status_aluguel NOT IN ('FINALIZADO', 'CANCELADO')
+    AND data_inicio  <= ?
+    AND data_termino >= ?;
+    */
     boolean existeSobreposicaoExcluindo(
             @Param("idVeiculo") int idVeiculo,
             @Param("idAluguel") int idAluguel,

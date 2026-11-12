@@ -36,7 +36,7 @@ public class Funcionario {
     private BigDecimal salario;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "status_funcionario", nullable = false)
     private StatusFuncionario statusFuncionario;
 
     @OneToMany(mappedBy = "funcionario")
