@@ -104,17 +104,35 @@ public class AluguelService {
 
     @Transactional
     public AluguelResponseDto update(int id, AluguelUpdateDto novosDados){
+        /*
+        UPDATE tb_aluguel
+        SET id_veiculo = 9,
+            id_funcionario = 1,
+            id_cliente = 3,
+            valor_aluguel = 1500.00,
+            data_inicio = '2026-12-10',
+            data_termino = '2026-12-20',
+            status_aluguel = 'FINALIZADO'
+        WHERE id = ?;
+        */
+
         Aluguel aluguel = buscarEntidade(id);
+        //SELECT * FROM tb_aluguel WHERE id = ?;
 
         if (aluguel.getStatusAluguel().equals(StatusAluguel.FINALIZADO)){
             throw new AluguelNaoPodeSerAlteradoException("Não é possivel modificar um aluguel que já terminou");
         }
+        //SELECT * FROM tb_aluguel WHERE id = ? AND status_aluguel = 'FINALIZADO';
+
         if (aluguel.getStatusAluguel().equals(StatusAluguel.CANCELADO)){
             throw new AluguelNaoPodeSerAlteradoException("Não é possivel modificar um aluguel que foi cancelado");
         }
+        //SELECT * FROM tb_aluguel WHERE id = ? AND status_aluguel = 'CANCELADO';
+
         if(novosDados.getDataInicio().isAfter(novosDados.getDataTermino())){
             throw new DataInvalidaException("A data de término deve ser depois da data de início");
         }
+        // Impede que a data de início seja posterior à data de término.
 
         if (aluguel.getStatusAluguel() == StatusAluguel.AGENDADO){
             if(novosDados.getDataInicio().isBefore(LocalDate.now())){
@@ -122,6 +140,8 @@ public class AluguelService {
             }
             
             aluguel.setDataInicio(novosDados.getDataInicio());
+            // Se o aluguel estiver agendado, permite alterar a data de início,
+            // desde que ela não seja anterior à data atual.
         }
         else {
             if(!novosDados.getDataInicio().equals(aluguel.getDataInicio())){
@@ -130,8 +150,13 @@ public class AluguelService {
             if (novosDados.getDataTermino().isBefore(LocalDate.now())) {
                 throw new DataInvalidaException("A data de término de um aluguel ativo não pode estar no passado");
             }
+
+            // Se o aluguel estiver ativo, impede a alteração da data de início
+            // e permite alterar a data de término somente para uma data futura ou atual
         }
+
         aluguel.setDataTermino(novosDados.getDataTermino());
+        // Atualiza a data de término do aluguel após as validações anteriores
 
         boolean ocupado = aluguelRepository.existeSobreposicaoExcluindo(
                 aluguel.getVeiculo().getId(),
@@ -140,15 +165,39 @@ public class AluguelService {
                 aluguel.getDataTermino(),
                 List.of(StatusAluguel.FINALIZADO, StatusAluguel.CANCELADO)
         );
+        /*
+           SELECT COUNT(*) > 0
+           FROM tb_aluguel
+           WHERE id_veiculo = ?                                    -- mesmo veículo
+              AND id <> ?                                           -- ignora o próprio aluguel
+              AND status_aluguel NOT IN ('FINALIZADO', 'CANCELADO')
+              AND data_inicio  <= ?                                 -- começa antes do meu término
+              AND data_termino >= ?;                                -- termina depois do meu início
+          Retorna true se existe conflito de datas para esse veículo.
+         */
+
+
         if(ocupado){
             throw new VeiculoIndisponivelException("Veiculo já alugado nesse periodo");
         }
 
         Long dias = Math.max(1L, ChronoUnit.DAYS.between(aluguel.getDataInicio(), aluguel.getDataTermino()));
+        // Calcula os dias entre o início e o término e pega o maior entre 1 e esse valor,
+        // garantindo no mínimo 1 diária. O resultado fica guardado em "dias".
+
         BigDecimal valor = aluguel.getVeiculo().getValorDiaria();
+        // Busca o valor da diária do veículo do aluguel
+        // SELECT v.valor_diaria FROM tb_aluguel a JOIN tb_veiculo v ON v.id = a.id_veiculo WHERE a.id = ?;
+
         aluguel.setValorAluguel(valor.multiply(BigDecimal.valueOf(dias)));
 
         return AluguelResponseDto.fromEntity(aluguelRepository.save(aluguel));
+        /*
+        UPDATE tb_aluguel
+        SET data_inicio = ?, data_termino = ?, valor_aluguel = ?
+            WHERE id = ?;
+
+         */
     }
 
     //Equivalente em SQL
@@ -211,6 +260,9 @@ public class AluguelService {
     @Transactional
     public void delete(int id){
         Aluguel aluguel = buscarEntidade(id);
+        // SELECT * FROM tb_aluguel WHERE id = ?;
+        // Carrega o aluguel para validar o status antes de excluir.
+
         if(aluguel.getStatusAluguel() == StatusAluguel.ATIVO){
             throw new AluguelNaoPodeSerAlteradoException("Não é possivel excluir um aluguel ATIVO");
         }
@@ -218,8 +270,10 @@ public class AluguelService {
         if(aluguel.getStatusAluguel() == StatusAluguel.FINALIZADO){
             throw new AluguelNaoPodeSerAlteradoException("Não é possivel excluir um aluguel FINALIZADO");
         }
+        // Em SQL, a regra equivaleria a: DELETE FROM tb_aluguel WHERE id = ? AND status_aluguel IN ('AGENDADO','CANCELADO')
 
         aluguelRepository.delete(aluguel);
+        // DELETE FROM tb_aluguel WHERE id = ?;
     }
 
     //consultas
